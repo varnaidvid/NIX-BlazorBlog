@@ -5,7 +5,7 @@
 
 <div class="comment-section">
     <div class="comments">
-        <h5>Comments: <span class="badge">@Comments?.Count</span></h5>
+        <h5>Comments: <Badge>@(Comments?.Count ?? 0)</Badge></h5>
         @if (Comments != null && Comments.Any())
         {
             @foreach (var comment in Comments)
