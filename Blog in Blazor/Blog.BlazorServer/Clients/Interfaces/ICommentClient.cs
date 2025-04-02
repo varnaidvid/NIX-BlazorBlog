@@ -1,11 +1,13 @@
-﻿using Blog.BlazorServer.ViewModels;
+using Blog.BlazorServer.ViewModels;
 
 namespace Blog.BlazorServer.Clients.Interfaces
 {
-    public interface ICommentClient
-    {
-        Task<HttpResponseMessage> AddAsync(CommentViewModel commentDTO);
+  public interface ICommentClient
+  {
+    Task<HttpResponseMessage> AddAsync(CommentViewModel commentDTO);
 
-        Task<HttpResponseMessage> DeleteAsync(int id);
-    }
+    Task<HttpResponseMessage> GetByPostIdAsync(int postId);
+
+    Task<HttpResponseMessage> DeleteAsync(int id);
+  }
 }

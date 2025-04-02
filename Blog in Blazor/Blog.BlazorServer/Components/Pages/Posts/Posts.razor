@@ -27,39 +27,47 @@
 
 <PostModal @ref="postModal" PostModel="new PostViewModel()" IsEdit="false" OnSave="HandleSaveNewPost" />
 
-<div class="row">
-    @foreach (var post in posts)
-    {
-        <div class="col-sm-3">
-            <div class="post-card card mb-4" style="height: 540px;">
-                <div class="card-img-wrapper">
-                    <div class="card-img-top" style="background-image: url('/Images/@(!string.IsNullOrEmpty(post.Image) ? post.Image : "placeholder.png")');"></div>
-                </div>
-                <div class="card-body" style="position: relative;">
-                    <h5 class="card-title">@post.Title</h5>
-                    <p class="card-text">@post.ContentPreview</p>
-                    @if (post.CategoryDTOs != null && post.CategoryDTOs.Any())
-                    {
-                        <div class="mb-3">
-                            <div class="selected-categories">
-                                @foreach (var category in post.CategoryDTOs)
-                                {
-                                    <Badge Color="BadgeColor.Primary" Style="margin-right: 3px">@category.Name</Badge>
-                                }
+@if (posts.Any())
+{
+    <div class="row">
+        @foreach (var post in posts)
+        {
+            <div class="col-sm-3">
+                <div class="post-card card mb-4" style="height: 540px;">
+                    <div class="card-img-wrapper">
+                        <div class="card-img-top" style="background-image: url('/Images/@(!string.IsNullOrEmpty(post.Image) ? post.Image : "placeholder.png")');"></div>
+                    </div>
+                    <div class="card-body" style="position: relative;">
+                        <h5 class="card-title">@post.Title</h5>
+                        <p class="card-text">@post.ContentPreview</p>
+                        @if (post.CategoryDTOs != null && post.CategoryDTOs.Any())
+                        {
+                            <div class="mb-3">
+                                <div class="selected-categories">
+                                    @foreach (var category in post.CategoryDTOs)
+                                    {
+                                        <Badge Color="BadgeColor.Primary" Style="margin-right: 3px">@category.Name</Badge>
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    }
-                    <button class="btn btn-dark card-more-btn" @onclick="() => NavigateToPost(post.Id)">More</button>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">@post.LastEditedBy - @post.LastEditedDate.ToString("dd/MM/yyyy")</small>
+                        }
+                        <button class="btn btn-dark card-more-btn" @onclick="() => NavigateToPost(post.Id)">More</button>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">@post.LastEditedBy - @post.LastEditedDate.ToString("dd/MM/yyyy")</small>
+                    </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
-
-
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <h4>No posts available</h4>
+        <p>There are currently no posts in the system. Please check back later or create a new post.</p>
+    </div>
+}
 
 
 @code {
