@@ -15,10 +15,11 @@
             <tr>
                 <td>@category.Id</td>
                 <td>@category.Name</td>
-                <td style="max-width: 70px;">
+                <td style="max-width: 150px;">
                     <AuthorizeView>
                         <Authorized>
-                            <Button Color="ButtonColor.Primary" @onclick="() => EditCategory(category)" Style="margin-right: 2px">Update </Button>             
+                            <Button Color="ButtonColor.Primary" @onclick="() => EditCategory(category)" Style="margin-right: 2px">Update</Button>
+                            <Button Color="ButtonColor.Danger" @onclick="() => DeleteCategory(category.Id)">Delete</Button>
                         </Authorized>
                     </AuthorizeView>
                 </td>
