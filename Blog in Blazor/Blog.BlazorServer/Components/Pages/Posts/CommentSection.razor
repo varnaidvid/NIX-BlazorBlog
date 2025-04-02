@@ -1,4 +1,4 @@
-﻿@using Blog.BlazorServer.ViewModels
+@using Blog.BlazorServer.ViewModels
 @using Blog.BlazorServer.Components.Shared
 @using Blog.BlazorServer.Clients.Interfaces
 @inject ICommentClient CommentClient
@@ -25,6 +25,16 @@
                     </div>
                     <div class="comment-body">
                         @comment.Text
+                        <div class="reaction-indicator mt-1">
+                            @if (comment.IsPositiveReaction)
+                            {
+                                <span class="text-success">👍 Liked</span>
+                            }
+                            else
+                            {
+                                <span class="text-danger">👎 Disliked</span>
+                            }
+                        </div>
                     </div>
                 </div>
             }
@@ -45,6 +55,15 @@
                             <InputTextArea id="commentText" class="form-control" @bind-Value="@CommentModel.Text" />
                             <ValidationMessage For="@(() => CommentModel.Text)" />
                         </div>
+                        <div class="reaction-selector mt-2 mb-2">
+                            <span class="me-2">Reaction:</span>
+                            <span class="reaction-icon @(CommentModel.IsPositiveReaction ? "selected" : "")" @onclick="() => CommentModel.IsPositiveReaction = true">
+                                👍 Like
+                            </span>
+                            <span class="reaction-icon @(!CommentModel.IsPositiveReaction ? "selected" : "")" @onclick="() => CommentModel.IsPositiveReaction = false">
+                                👎 Dislike
+                            </span>
+                        </div>
                         <button type="submit" class="btn btn-primary" disabled="@(!formContext.Validate() || !formContext.IsModified())">Save</button>
                     </div>
                 </EditForm>
@@ -58,6 +77,34 @@
 <SharedModal @ref="deleteConfirmModal" Title="Are you sure you want to delete the comment?" OnConfirmClick="DeleteComment">
     Post would be permanently deleted from the database.
 </SharedModal>
+
+<style>
+    .reaction-selector {
+        display: flex;
+        align-items: center;
+    }
+    
+    .reaction-icon {
+        cursor: pointer;
+        padding: 5px 10px;
+        margin-right: 10px;
+        border-radius: 4px;
+        transition: all 0.2s;
+    }
+    
+    .reaction-icon:hover {
+        background-color: #f0f0f0;
+    }
+    
+    .reaction-icon.selected {
+        background-color: #e0e0e0;
+        font-weight: bold;
+    }
+    
+    .reaction-indicator {
+        font-size: 0.9rem;
+    }
+</style>
 
 @code {
     [Inject] protected ToastService ToastService { get; set; }
