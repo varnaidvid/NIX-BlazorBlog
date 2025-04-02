@@ -1,6 +1,7 @@
 @using Blog.BlazorServer.ViewModels
 @using Blog.BlazorServer.Components.Shared
 @using Blog.BlazorServer.Clients.Interfaces
+@using System.Text.Json
 @inject ICommentClient CommentClient
 
 <div class="comment-section">
@@ -137,15 +138,30 @@
         {
             ToastService.Notify(new(ToastType.Success, "Comment added successfully"));
             CommentModel = new CommentViewModel();
+            await RefreshComments();
         }
         else
         {
             var errorMessage = $"Failed to add comment. Status code: {response.StatusCode}";
             ToastService.Notify(new(ToastType.Danger, errorMessage));
-            return;
         }
     }
 
+    private async Task RefreshComments()
+    {
+        var response = await CommentClient.GetByPostIdAsync(PostId);
+        
+        if (response.IsSuccessStatusCode)
+        {
+            var content = await response.Content.ReadAsStringAsync();
+            var updatedComments = JsonSerializer.Deserialize<List<CommentViewModel>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                
+            Comments.Clear();
+            if (updatedComments != null)
+                foreach (var comment in updatedComments)
+                    Comments.Add(comment);
+        }
+    }
 
     private async Task DeleteComment()
     {
