@@ -34,7 +34,16 @@
                             <span class="oi" aria-hidden="true"></span> Register
                         </NavLink>
                     </li>
+                    <li class="nav-item">
+                        You are not logged in
+                    </li>
                     </NotAuthorized>
+
+                    <Authorized>
+                        <li class="nav-item">
+                            Hello, @context.User.Identity.Name
+                        </li>
+                    </Authorized>
                 </AuthorizeView>
             </ul>
         </div>
